@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed } from 'vue';
+import { computed, ref } from 'vue';
 
 const props = defineProps({
   post: {
@@ -9,6 +9,12 @@ const props = defineProps({
 });
 
 const emit = defineEmits(['analyze']);
+
+const isLiked = ref(false);
+
+const toggleLike = () => {
+  isLiked.value = !isLiked.value;
+};
 
 const formatDate = (dateString: string) => {
   const date = new Date(dateString);
@@ -50,13 +56,34 @@ const videoUrl = computed(() => {
       <!-- Decorative Gradient overlay for text readability -->
       <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-black/30 pointer-events-none"></div>
       
-      <!-- Top Right overlay for views -->
-      <div class="absolute top-2 right-2 bg-black/40 backdrop-blur-sm text-white text-xs font-semibold px-2 py-1 rounded flex items-center gap-1">
-        <svg xmlns="http://www.w3.org/2000/svg" class="h-3 w-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
-        </svg>
-        1.2M
+      <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-black/30 pointer-events-none"></div>
+      
+      <!-- Top Right overlay for actions (Like & Views) -->
+      <div class="absolute top-2 right-2 flex flex-col gap-2 items-end z-10">
+        <!-- Views -->
+        <div class="bg-black/40 backdrop-blur-sm text-white text-xs font-semibold px-2 py-1 rounded flex items-center gap-1">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-3 w-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+          </svg>
+          1.2M
+        </div>
+        
+        <!-- Like Button -->
+        <button 
+          @click.stop="toggleLike"
+          class="w-8 h-8 rounded-full bg-black/40 backdrop-blur-sm flex items-center justify-center transition-all duration-300 hover:scale-110 active:scale-95 z-20"
+        >
+          <svg 
+            xmlns="http://www.w3.org/2000/svg" 
+            :class="['h-4 w-4 transition-colors duration-300', isLiked ? 'text-red-500 fill-current' : 'text-white']" 
+            fill="none" 
+            viewBox="0 0 24 24" 
+            stroke="currentColor"
+          >
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+          </svg>
+        </button>
       </div>
       
       <!-- Bottom Left Overlay for User -->

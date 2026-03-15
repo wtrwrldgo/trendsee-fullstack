@@ -13,6 +13,11 @@ const emit = defineEmits(['close']);
 
 const isAdapting = ref(false);
 const isAdapted = ref(false);
+const isLiked = ref(false);
+
+const toggleLike = () => {
+  isLiked.value = !isLiked.value;
+};
 
 const originalHooks = [
   { id: 1, time: '0s', text: 'Визуальный триггер - резкая смена ракурса привлекает внимание.', bgClass: 'bg-indigo-100', textClass: 'text-indigo-600' },
@@ -108,7 +113,28 @@ const videoUrl = computed(() => {
                muted 
                playsinline
              ></video>
-          </div>
+             
+             <!-- Decorative Gradient for overlays -->
+             <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-black/30 pointer-events-none"></div>
+
+             <!-- Top Right Like Button -->
+             <div class="absolute top-3 right-3 z-10">
+               <button 
+                 @click.stop="toggleLike"
+                 class="w-10 h-10 rounded-full bg-black/40 backdrop-blur-sm flex items-center justify-center transition-all duration-300 hover:scale-110 active:scale-95 shadow-sm"
+               >
+                 <svg 
+                   xmlns="http://www.w3.org/2000/svg" 
+                   :class="['h-5 w-5 transition-colors duration-300', isLiked ? 'text-red-500 fill-current' : 'text-white']" 
+                   fill="none" 
+                   viewBox="0 0 24 24" 
+                   stroke="currentColor"
+                 >
+                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+                 </svg>
+               </button>
+             </div>
+           </div>
           
           <div class="flex items-center gap-3 mb-6">
             <div class="w-10 h-10 rounded-full bg-blue-100 text-blue-600 flex items-center justify-center font-bold border border-blue-200">
