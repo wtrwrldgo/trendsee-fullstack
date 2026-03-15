@@ -107,7 +107,7 @@ const openAnalysis = (post: Publication) => {
 
 <template>
   <div class="min-h-screen bg-slate-100 p-8">
-    <div class="max-w-4xl mx-auto">
+    <div class="w-full">
       <h1 class="text-3xl font-bold mb-8 text-gray-800">My Publications feed</h1>
       
       <div class="flex flex-wrap gap-6">
