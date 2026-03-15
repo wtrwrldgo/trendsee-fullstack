@@ -18,7 +18,7 @@ const menuItems = [
 <template>
   <aside class="w-64 bg-white border-r border-gray-100 flex flex-col h-screen sticky top-0 flex-shrink-0 z-20 hidden md:flex">
     <!-- Logo -->
-    <div class="h-20 flex items-center px-6 border-b border-gray-100">
+    <div class="h-20 flex items-center px-6">
       <div class="flex items-center gap-2">
         <div class="w-8 h-8 bg-blue-600 rounded-lg flex items-center justify-center">
           <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-white" viewBox="0 0 20 20" fill="currentColor">
@@ -26,11 +26,24 @@ const menuItems = [
           </svg>
         </div>
         <span class="text-xl font-bold tracking-tight text-gray-900">Trendsee</span>
+        <span class="text-[10px] font-bold tracking-wider text-gray-400 uppercase ml-1 bg-gray-100 px-1.5 py-0.5 rounded">Beta</span>
+      </div>
+    </div>
+
+    <!-- Search Bar -->
+    <div class="px-4 mb-2">
+      <div class="relative flex items-center w-full h-10 rounded-xl bg-gray-50 overflow-hidden text-gray-600 focus-within:ring-2 focus-within:ring-blue-100 focus-within:bg-white transition-all">
+        <div class="grid place-items-center h-full w-10 text-gray-400">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+          </svg>
+        </div>
+        <input class="peer h-full w-full outline-none text-sm text-gray-700 pr-2 bg-transparent placeholder-gray-400" type="text" id="search" placeholder="Поиск контента..." /> 
       </div>
     </div>
 
     <!-- Navigation -->
-    <nav class="flex-1 px-4 py-8 space-y-2">
+    <nav class="flex-1 px-4 py-4 space-y-1">
       <a 
         v-for="item in menuItems" 
         :key="item.id" 

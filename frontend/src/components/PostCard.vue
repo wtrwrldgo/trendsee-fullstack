@@ -52,48 +52,81 @@ const videoUrl = computed(() => {
       ></video>
       <!-- Decorative Gradient overlay for text readability -->
       <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-black/30 pointer-events-none"></div>
-      
-      <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-black/30 pointer-events-none"></div>
-      
-      <!-- Top Right overlay for actions (Like & Views) -->
-      <div class="absolute top-2 right-2 flex flex-col gap-2 items-end z-10">
-        <!-- Views -->
-        <div class="bg-black/40 backdrop-blur-sm text-white text-xs font-semibold px-2 py-1 rounded flex items-center gap-1">
-          <svg xmlns="http://www.w3.org/2000/svg" class="h-3 w-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+      <!-- Top Left Overlay for Source (e.g. Reels icon) -->
+      <div class="absolute top-2 left-2 flex items-center gap-1 bg-black/40 backdrop-blur-sm text-white text-xs px-2 py-1 rounded-full z-10">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-3 w-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z" />
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+        </svg>
+        Reels
+      </div>
+
+      <!-- Top Right Heart Button -->
+      <button 
+        @click.stop="toggleLike"
+        class="absolute top-2 right-2 w-8 h-8 rounded-full bg-black/40 backdrop-blur-sm flex items-center justify-center transition-all duration-300 hover:scale-110 active:scale-95 z-20"
+      >
+        <svg 
+          xmlns="http://www.w3.org/2000/svg" 
+          :class="['h-4 w-4 transition-colors duration-300', isLiked ? 'text-red-500 fill-current' : 'text-white']" 
+          fill="none" 
+          viewBox="0 0 24 24" 
+          stroke="currentColor"
+        >
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+        </svg>
+      </button>
+
+      <!-- Bottom Stats Overlay row inside Video -->
+      <div class="absolute bottom-2 left-2 right-2 flex items-center justify-between text-white text-[10px] font-medium z-10">
+        <div class="flex items-center gap-1">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-3 w-3 opacity-90" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
           </svg>
-          1.2M
+          105k
         </div>
-        
-        <!-- Like Button -->
-        <button 
-          @click.stop="toggleLike"
-          class="w-8 h-8 rounded-full bg-black/40 backdrop-blur-sm flex items-center justify-center transition-all duration-300 hover:scale-110 active:scale-95 z-20"
-        >
-          <svg 
-            xmlns="http://www.w3.org/2000/svg" 
-            :class="['h-4 w-4 transition-colors duration-300', isLiked ? 'text-red-500 fill-current' : 'text-white']" 
-            fill="none" 
-            viewBox="0 0 24 24" 
-            stroke="currentColor"
-          >
+        <div class="flex items-center gap-1">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-3 w-3 opacity-90" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
           </svg>
-        </button>
-      </div>
-      
-      <!-- Bottom Left Overlay for User -->
-      <div class="absolute bottom-2 left-2 flex items-center gap-2">
-        <div class="w-8 h-8 rounded-full bg-white flex items-center justify-center text-xs font-bold text-blue-600 shadow-sm border border-gray-100">
-          T
+          {{ isLiked ? '86k' : '85k' }}
         </div>
-        <span class="text-white text-xs font-medium drop-shadow-md">@trendsee</span>
+        <div class="flex items-center gap-1">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-3 w-3 opacity-90" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
+          </svg>
+          15k
+        </div>
+        <div class="flex items-center gap-1">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-3 w-3 opacity-90" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" />
+          </svg>
+          485
+        </div>
       </div>
     </div>
     
     <!-- Content Section -->
-    <div class="p-4 flex flex-col flex-grow">
+    <div class="p-4 flex flex-col flex-grow bg-white">
+      
+      <!-- User Info Row (Moved from video to content area per Figma) -->
+      <div class="flex justify-between items-center mb-3">
+        <div class="flex items-center gap-2">
+          <div class="w-8 h-8 rounded-full overflow-hidden bg-gray-200">
+             <img src="https://ui-avatars.com/api/?name=User&background=random" alt="Avatar" class="w-full h-full object-cover">
+          </div>
+          <div class="flex flex-col">
+            <span class="text-sm font-semibold text-blue-600">@blogerich</span>
+            <span class="text-[10px] text-gray-500">384.5K</span>
+          </div>
+        </div>
+        <div class="text-blue-500">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
+          </svg>
+        </div>
+      </div>
       <!-- Vibe Score -->
       <div class="flex items-center justify-between mb-2">
         <div class="flex items-center gap-1">
