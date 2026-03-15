@@ -8,10 +8,21 @@ const props = defineProps({
   }
 });
 
-const emit = defineEmits(['close']);
-
 const isAdapting = ref(false);
 const isAdapted = ref(false);
+
+const originalHooks = [
+  { id: 1, time: '0s', text: 'Визуальный триггер - резкая смена ракурса привлекает внимание.', bgClass: 'bg-indigo-100', textClass: 'text-indigo-600' },
+  { id: 2, time: '3s', text: 'Завязка - текстовый вопрос на экране, заставляющий досмотреть до конца.', bgClass: 'bg-blue-100', textClass: 'text-blue-600' }
+];
+
+const adaptedHooks = [
+  { id: 3, time: '0s', text: 'Появление вашего продукта крупным планом под трендовый бит.', bgClass: 'bg-green-100', textClass: 'text-green-600' },
+  { id: 4, time: '2s', text: 'Озвучка популярной проблемы целевой аудитории текстом на экране.', bgClass: 'bg-amber-100', textClass: 'text-amber-600' },
+  { id: 5, time: '5s', text: 'Call-to-Action: Решение этой проблемы через ваш продукт! Ссылка в био.', bgClass: 'bg-purple-100', textClass: 'text-purple-600' }
+];
+
+const currentHooks = computed(() => isAdapted.value ? adaptedHooks : originalHooks);
 
 const handleAdapt = () => {
   if (isAdapted.value || isAdapting.value) return;
@@ -143,17 +154,17 @@ const videoUrl = computed(() => {
             </div>
             
             <div>
-               <h3 class="text-xs font-bold text-gray-400 uppercase tracking-wider mb-2">Структура хуков</h3>
-               <ul class="space-y-2">
-                 <li class="flex items-start gap-3 bg-white p-3 rounded-lg border border-gray-100">
-                    <div class="w-6 h-6 rounded bg-indigo-100 flex items-center justify-center flex-shrink-0 mt-0.5"><span class="text-xs font-bold text-indigo-600">0s</span></div>
-                    <p class="text-sm text-gray-600">Визуальный триггер - резкая смена ракурса привлекает внимание.</p>
+               <h3 class="text-xs font-bold text-gray-400 uppercase tracking-wider mb-2">
+                 {{ isAdapted ? 'Адаптированный сценарий' : 'Структура хуков' }}
+               </h3>
+               <TransitionGroup name="list" tag="ul" class="space-y-2 relative">
+                 <li v-for="hook in currentHooks" :key="hook.id" class="flex items-start gap-3 bg-white p-3 rounded-lg border border-gray-100 shadow-sm transition-all duration-300">
+                    <div :class="['w-6 h-6 rounded flex items-center justify-center flex-shrink-0 mt-0.5', hook.bgClass]">
+                      <span :class="['text-xs font-bold', hook.textClass]">{{ hook.time }}</span>
+                    </div>
+                    <p class="text-sm text-gray-600">{{ hook.text }}</p>
                  </li>
-                 <li class="flex items-start gap-3 bg-white p-3 rounded-lg border border-gray-100">
-                    <div class="w-6 h-6 rounded bg-blue-100 flex items-center justify-center flex-shrink-0 mt-0.5"><span class="text-xs font-bold text-blue-600">3s</span></div>
-                    <p class="text-sm text-gray-600">Завязка - текстовый вопрос на экране, заставляющий досмотреть до конца.</p>
-                 </li>
-               </ul>
+               </TransitionGroup>
             </div>
           </div>
           
@@ -206,5 +217,19 @@ const videoUrl = computed(() => {
 .modal-enter-from .bg-white,
 .modal-leave-to .bg-white {
   transform: scale(0.95) translateY(10px);
+}
+
+.list-enter-active,
+.list-leave-active {
+  transition: all 0.4s ease;
+}
+.list-enter-from {
+  opacity: 0;
+  transform: translateX(-20px);
+}
+.list-leave-to {
+  opacity: 0;
+  transform: translateX(20px);
+  position: absolute;
 }
 </style>
