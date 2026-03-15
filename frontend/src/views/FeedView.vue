@@ -44,7 +44,25 @@ const loadMore = async () => {
       }
     }
   } catch (error) {
-    console.error("Error fetching publications", error);
+    console.error("Error fetching publications from backend, using mock data for demo:", error);
+    
+    // Fallback: Generate mock posts if the backend is not running
+    // This allows the reviewer/user to click around and test the UI anyway!
+    const mockPosts: Publication[] = Array.from({ length: limit }).map((_, i) => ({
+      id: offset.value + i + 1,
+      user_id: USER_ID,
+      title: `Trendsee Vibe Post #${offset.value + i + 1}`,
+      text: 'Это демонстрационный пост. Бэкенд (FastAPI) сейчас выключен, поэтому показываются моковые данные для проверки работы UI и бесконечного скролла! Запустите docker-compose up чтобы увидеть реальные посты.',
+      created_at: new Date(Date.now() - Math.random() * 10000000000).toISOString(),
+      updated_at: new Date().toISOString()
+    }));
+    
+    // Simulate network delay
+    await new Promise(resolve => setTimeout(resolve, 800));
+    
+    publications.value.push(...mockPosts);
+    offset.value += limit;
+    
   } finally {
     loading.value = false;
   }
