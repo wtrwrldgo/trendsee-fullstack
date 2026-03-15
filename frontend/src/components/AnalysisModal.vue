@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { onMounted, onUnmounted, computed, ref } from 'vue';
+import { useLike } from '../composables/useLike';
 import AnimatedNumber from './AnimatedNumber.vue';
 
 const props = defineProps({
@@ -13,11 +14,8 @@ const emit = defineEmits(['close']);
 
 const isAdapting = ref(false);
 const isAdapted = ref(false);
-const isLiked = ref(false);
 
-const toggleLike = () => {
-  isLiked.value = !isLiked.value;
-};
+const { isLiked, toggleLike } = useLike(props.post.id);
 
 const originalHooks = [
   { id: 1, time: '0s', text: 'Визуальный триггер - резкая смена ракурса привлекает внимание.', bgClass: 'bg-indigo-100', textClass: 'text-indigo-600' },

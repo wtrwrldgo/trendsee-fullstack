@@ -1,5 +1,6 @@
 <script setup lang="ts">
-import { computed, ref } from 'vue';
+import { computed } from 'vue';
+import { useLike } from '../composables/useLike';
 
 const props = defineProps({
   post: {
@@ -10,11 +11,7 @@ const props = defineProps({
 
 const emit = defineEmits(['analyze']);
 
-const isLiked = ref(false);
-
-const toggleLike = () => {
-  isLiked.value = !isLiked.value;
-};
+const { isLiked, toggleLike } = useLike(props.post.id);
 
 const formatDate = (dateString: string) => {
   const date = new Date(dateString);
