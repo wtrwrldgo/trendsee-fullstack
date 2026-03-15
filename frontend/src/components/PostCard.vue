@@ -22,6 +22,24 @@ const formatDate = (dateString: string) => {
   });
 };
 
+const downloadVideo = async () => {
+  try {
+    const response = await fetch(videoUrl.value);
+    const blob = await response.blob();
+    const url = window.URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.style.display = 'none';
+    a.href = url;
+    a.download = `trendsee-video-${props.post.id}.mp4`;
+    document.body.appendChild(a);
+    a.click();
+    window.URL.revokeObjectURL(url);
+    document.body.removeChild(a);
+  } catch (error) {
+    console.error('Download failed:', error);
+  }
+};
+
 const sampleVideos = [
   'https://storage.googleapis.com/gtv-videos-bucket/sample/ForBiggerFun.mp4',
   'https://storage.googleapis.com/gtv-videos-bucket/sample/ForBiggerJoyrides.mp4',
@@ -61,21 +79,46 @@ const videoUrl = computed(() => {
         Reels
       </div>
 
-      <!-- Top Right Heart Button -->
-      <button 
-        @click.stop="toggleLike"
-        class="absolute top-2 right-2 w-8 h-8 rounded-full bg-black/40 backdrop-blur-sm flex items-center justify-center transition-all duration-300 hover:scale-110 active:scale-95 z-20"
-      >
-        <svg 
-          xmlns="http://www.w3.org/2000/svg" 
-          :class="['h-4 w-4 transition-colors duration-300', isLiked ? 'text-red-500 fill-current' : 'text-white']" 
-          fill="none" 
-          viewBox="0 0 24 24" 
-          stroke="currentColor"
+      <!-- Vertical Actions Stack (Like, Link, Download) -->
+      <div class="absolute top-2 right-2 flex flex-col gap-2 z-20">
+        <!-- Like Button -->
+        <button 
+          @click.stop="toggleLike"
+          class="w-8 h-8 rounded-full bg-black/40 backdrop-blur-sm flex items-center justify-center transition-all duration-300 hover:scale-110 active:scale-95"
         >
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
-        </svg>
-      </button>
+          <svg 
+            xmlns="http://www.w3.org/2000/svg" 
+            :class="['h-4 w-4 transition-colors duration-300', isLiked ? 'text-red-500 fill-current' : 'text-white']" 
+            fill="none" 
+            viewBox="0 0 24 24" 
+            stroke="currentColor"
+          >
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+          </svg>
+        </button>
+
+        <!-- Instagram Link Button -->
+        <a 
+          href="https://www.instagram.com/trendsee"
+          target="_blank"
+          @click.stop
+          class="w-8 h-8 rounded-full bg-black/40 backdrop-blur-sm flex items-center justify-center transition-all duration-300 hover:scale-110 active:scale-95 text-white"
+        >
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+          </svg>
+        </a>
+
+        <!-- Download Button -->
+        <button 
+          @click.stop="downloadVideo"
+          class="w-8 h-8 rounded-full bg-black/40 backdrop-blur-sm flex items-center justify-center transition-all duration-300 hover:scale-110 active:scale-95 text-white"
+        >
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+          </svg>
+        </button>
+      </div>
 
       <!-- Bottom Stats Overlay row inside Video -->
       <div class="absolute bottom-2 left-2 right-2 flex items-center justify-between text-white text-[10px] font-medium z-10">
@@ -142,11 +185,8 @@ const videoUrl = computed(() => {
       <div class="mt-auto">
         <button 
           @click="emit('analyze')"
-          class="w-full bg-blue-500 hover:bg-blue-600 active:bg-blue-700 text-white font-medium py-2 rounded-xl transition-colors text-sm flex items-center justify-center gap-2">
-          <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
-          </svg>
-          Анализ
+          class="w-full bg-[#3030BD] hover:bg-blue-800 active:bg-blue-900 text-white font-medium py-2 rounded-xl transition-colors text-sm flex items-center justify-center gap-2">
+          Анализ видео
         </button>
       </div>
     </div>
