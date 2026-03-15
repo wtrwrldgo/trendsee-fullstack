@@ -1,4 +1,5 @@
-import { defineProps, defineEmits, onMounted, onUnmounted, computed, ref } from 'vue';
+<script setup lang="ts">
+import { onMounted, onUnmounted, computed, ref } from 'vue';
 import AnimatedNumber from './AnimatedNumber.vue';
 
 const props = defineProps({
@@ -7,6 +8,8 @@ const props = defineProps({
     required: true
   }
 });
+
+const emit = defineEmits(['close']);
 
 const isAdapting = ref(false);
 const isAdapted = ref(false);
