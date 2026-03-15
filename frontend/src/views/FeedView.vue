@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, onMounted } from 'vue';
+import { ref, onMounted, computed } from 'vue';
 import { useIntersectionObserver } from '@vueuse/core';
 import api from '../api';
 import PostCard from '../components/PostCard.vue';
@@ -15,6 +15,13 @@ interface Publication {
   updated_at: string;
 }
 
+const props = defineProps({
+  searchQuery: {
+    type: String,
+    default: ''
+  }
+});
+
 const publications = ref<Publication[]>([]);
 const loading = ref(false);
 const limit = 10;
@@ -22,6 +29,14 @@ const offset = ref(0);
 const hasMore = ref(true);
 const target = ref(null);
 const selectedPost = ref<Publication | null>(null);
+
+const filteredPublications = computed(() => {
+  if (!props.searchQuery) return publications.value;
+  const q = props.searchQuery.toLowerCase();
+  return publications.value.filter(p => 
+    p.title.toLowerCase().includes(q) || p.text.toLowerCase().includes(q)
+  );
+});
 
 // Harcoded user_id for testing (as per requirement to visualize)
 // In reality, this would be fetched from auth context
@@ -97,15 +112,23 @@ const openAnalysis = (post: Publication) => {
       
       <div class="flex flex-wrap gap-6">
         <PostCard 
-          v-for="post in publications" 
+          v-for="post in filteredPublications" 
           :key="post.id" 
           :post="post" 
           @analyze="openAnalysis(post)"
         />
       </div>
+
+      <!-- Empty State for Search -->
+      <div v-if="filteredPublications.length === 0 && !loading && searchQuery" class="w-full py-16 flex flex-col items-center justify-center text-gray-500">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12 text-gray-300 mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+        </svg>
+        <p>По вашему запросу "{{ searchQuery }}" ничего не найдено.</p>
+      </div>
       
       <!-- Loading State & Infinite Scroll Trigger -->
-      <div ref="target" class="w-full">
+      <div ref="target" class="w-full" v-if="!searchQuery">
         <!-- Text feedback removed, replaced with skeleton grid -->
         <div v-if="loading" class="flex flex-wrap gap-6 mt-6">
            <SkeletonCard v-for="i in 6" :key="`skeleton-${i}`" />

@@ -1,11 +1,16 @@
 <script setup lang="ts">
+import { ref } from 'vue';
+
 const props = defineProps<{
   activeMenu: string
 }>();
 
 const emit = defineEmits<{
-  (e: 'change-menu', id: string): void
+  (e: 'change-menu', id: string): void;
+  (e: 'search', query: string): void;
 }>();
+
+const searchQuery = ref('');
 
 const menuItems = [
   { id: 'feed', name: 'Моя лента', icon: 'M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 002-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10' },
@@ -38,7 +43,14 @@ const menuItems = [
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
           </svg>
         </div>
-        <input class="peer h-full w-full outline-none text-sm text-gray-700 pr-2 bg-transparent placeholder-gray-400" type="text" id="search" placeholder="Поиск контента..." /> 
+        <input 
+          v-model="searchQuery"
+          @input="emit('search', searchQuery)"
+          class="peer h-full w-full outline-none text-sm text-gray-700 pr-2 bg-transparent placeholder-gray-400" 
+          type="text" 
+          id="search" 
+          placeholder="Поиск контента..." 
+        /> 
       </div>
     </div>
 

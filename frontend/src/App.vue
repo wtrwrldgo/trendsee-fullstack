@@ -4,13 +4,21 @@ import Sidebar from './components/Sidebar.vue'
 import FeedView from './views/FeedView.vue'
 
 const currentMenu = ref('feed')
+const searchQuery = ref('');
 </script>
 
 <template>
   <div class="flex min-h-screen bg-slate-50">
-    <Sidebar :active-menu="currentMenu" @change-menu="currentMenu = $event" />
-    <main class="flex-1 w-full min-w-0">
-      <FeedView v-if="currentMenu === 'feed'" />
+    <Sidebar 
+      :active-menu="currentMenu" 
+      @change-menu="currentMenu = $event" 
+      @search="searchQuery = $event"
+    />
+    <main class="flex-1 overflow-y-auto">
+      <FeedView 
+        v-if="currentMenu === 'feed'" 
+        :search-query="searchQuery"
+      />
       
       <!-- Placeholder for undeveloped sections -->
       <div v-else class="h-full flex flex-col items-center justify-center p-8 text-center bg-white rounded-tl-3xl shadow-sm lg:m-2 lg:ml-0 border border-gray-100 min-h-[calc(100vh-16px)]">
