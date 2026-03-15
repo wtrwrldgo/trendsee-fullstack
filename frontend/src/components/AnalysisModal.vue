@@ -72,12 +72,12 @@ const formatDate = (dateString: string) => {
 };
 
 const sampleVideos = [
-  'https://assets.mixkit.co/videos/preview/mixkit-girl-in-neon-sign-1232-large.mp4',
-  'https://assets.mixkit.co/videos/preview/mixkit-winter-fashion-cold-looking-woman-concept-video-39874-large.mp4',
-  'https://assets.mixkit.co/videos/preview/mixkit-tree-with-yellow-flowers-1173-large.mp4',
-  'https://assets.mixkit.co/videos/preview/mixkit-shoes-of-a-person-doing-a-stretching-exercise-43407-large.mp4',
-  'https://assets.mixkit.co/videos/preview/mixkit-waves-in-the-water-1164-large.mp4',
-  'https://assets.mixkit.co/videos/preview/mixkit-very-close-shot-of-the-leaves-of-a-tree-wet-18310-large.mp4'
+  'https://res.cloudinary.com/demo/video/upload/c_fill,ar_9:16,w_400/dog.mp4',
+  'https://res.cloudinary.com/demo/video/upload/c_fill,ar_9:16,w_400/elephants.mp4',
+  'https://res.cloudinary.com/demo/video/upload/c_fill,ar_9:16,w_400/snow_horses.mp4',
+  'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4',
+  'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerJoyrides.mp4',
+  'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerMeltdowns.mp4'
 ];
 
 const videoUrl = computed(() => {
