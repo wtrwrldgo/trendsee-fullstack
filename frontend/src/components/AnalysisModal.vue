@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { defineProps, defineEmits, onMounted, onUnmounted } from 'vue';
+import { defineProps, defineEmits, onMounted, onUnmounted, computed } from 'vue';
 
 const props = defineProps({
   post: {
@@ -29,6 +29,20 @@ const formatDate = (dateString: string) => {
     minute: '2-digit'
   });
 };
+
+const sampleVideos = [
+  'https://assets.mixkit.co/videos/preview/mixkit-skater-doing-a-flip-trick-in-the-street-34204-large.mp4',
+  'https://assets.mixkit.co/videos/preview/mixkit-young-woman-in-a-pink-and-blue-neon-light-city-43890-large.mp4',
+  'https://assets.mixkit.co/videos/preview/mixkit-a-girl-blowing-a-bubble-gum-at-an-amusement-park-1226-large.mp4',
+  'https://assets.mixkit.co/videos/preview/mixkit-hands-holding-a-smart-phone-with-a-green-screen-32651-large.mp4',
+  'https://assets.mixkit.co/videos/preview/mixkit-young-woman-with-yellow-glasses-in-a-blue-and-pink-43895-large.mp4',
+  'https://assets.mixkit.co/videos/preview/mixkit-portrait-of-a-woman-in-a-pool-1259-large.mp4'
+];
+
+const videoUrl = computed(() => {
+  const index = (props.post.id || 0) % sampleVideos.length;
+  return sampleVideos[index];
+});
 </script>
 
 <template>
@@ -47,13 +61,15 @@ const formatDate = (dateString: string) => {
         
         <!-- Left Column: Media & Summary -->
         <div class="bg-slate-50 p-6 md:w-[320px] flex-shrink-0 flex flex-col border-r border-gray-100">
-          <div class="w-full aspect-[9/16] bg-gradient-to-tr from-blue-200 to-indigo-200 rounded-2xl mb-6 relative overflow-hidden shadow-inner">
-             <div class="absolute inset-0 flex items-center justify-center">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12 text-white/50" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z" />
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                </svg>
-             </div>
+          <div class="w-full aspect-[9/16] bg-slate-900 rounded-2xl mb-6 relative overflow-hidden shadow-inner group">
+             <video 
+               :src="videoUrl" 
+               class="absolute inset-0 w-full h-full object-cover opacity-90 group-hover:opacity-100 transition-opacity"
+               autoplay 
+               loop 
+               muted 
+               playsinline
+             ></video>
           </div>
           
           <div class="flex items-center gap-3 mb-6">

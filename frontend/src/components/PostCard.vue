@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { defineProps, defineEmits } from 'vue';
+import { defineProps, defineEmits, computed } from 'vue';
 
 const props = defineProps({
   post: {
@@ -18,14 +18,37 @@ const formatDate = (dateString: string) => {
     year: 'numeric'
   });
 };
+
+const sampleVideos = [
+  'https://assets.mixkit.co/videos/preview/mixkit-skater-doing-a-flip-trick-in-the-street-34204-large.mp4',
+  'https://assets.mixkit.co/videos/preview/mixkit-young-woman-in-a-pink-and-blue-neon-light-city-43890-large.mp4',
+  'https://assets.mixkit.co/videos/preview/mixkit-a-girl-blowing-a-bubble-gum-at-an-amusement-park-1226-large.mp4',
+  'https://assets.mixkit.co/videos/preview/mixkit-hands-holding-a-smart-phone-with-a-green-screen-32651-large.mp4',
+  'https://assets.mixkit.co/videos/preview/mixkit-young-woman-with-yellow-glasses-in-a-blue-and-pink-43895-large.mp4',
+  'https://assets.mixkit.co/videos/preview/mixkit-portrait-of-a-woman-in-a-pool-1259-large.mp4'
+];
+
+const videoUrl = computed(() => {
+  const index = (props.post.id || 0) % sampleVideos.length;
+  return sampleVideos[index];
+});
 </script>
 
 <template>
   <div class="w-[262px] bg-white rounded-2xl flex flex-col overflow-hidden shadow-sm hover:shadow-md transition-shadow">
     <!-- Header Image / Video Placeholder -->
     <div class="relative h-48 bg-slate-200 w-full overflow-hidden">
-      <!-- Decorative Gradient backgorund (simulating video thumbnail) -->
-      <div class="absolute inset-0 bg-gradient-to-br from-blue-300 to-purple-400 opacity-60"></div>
+      <!-- Background Video -->
+      <video 
+        :src="videoUrl" 
+        class="absolute inset-0 w-full h-full object-cover"
+        autoplay 
+        loop 
+        muted 
+        playsinline
+      ></video>
+      <!-- Decorative Gradient overlay for text readability -->
+      <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-black/30 pointer-events-none"></div>
       
       <!-- Top Right overlay for views -->
       <div class="absolute top-2 right-2 bg-black/40 backdrop-blur-sm text-white text-xs font-semibold px-2 py-1 rounded flex items-center gap-1">
