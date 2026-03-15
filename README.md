@@ -1,45 +1,77 @@
-# Trendsee Fullstack Test Assignment
+# Trendsee Test Task
 
-This repository contains the completed test assignment for the Trendsee "vibe coder" full-stack role.
+Fullstack publication feed service: FastAPI + PostgreSQL + Redis + JWT backend, Vue 3 + TypeScript frontend.
 
-## Architecture & Technology Stack
-- **Backend**: FastAPI
-  - Async PostgreSQL (via `asyncpg`, without SQLAlchemy for raw parameterized speed)
-  - Redis cache (via `redis-py` async)
-  - JWT Authentication (PyJWT)
-  - Strict Dependency Injection architecture
-- **Frontend**: Vue.js 3 + Vite
-  - Tailwind CSS (Pixel-perfect matching Figma layout)
-  - Axios API Client
-  - VueUse (`useIntersectionObserver` for infinite scroll logic)
-- **Infrastructure**: Docker Compose (4 services tied together)
+## Quick Start
 
-## Features Realized
-- **Backend Caching Logic**: 
-  - Hot posts (< 10 mins) are stored and fetched instantly from Redis.
-  - Older posts are fetched from PostgreSQL with an artificial 2-second simulated delay (`asyncio.sleep(2)`).
-- **Infinite Scroll Feed**: Frontend implements infinite scrolling triggering 500px before the bottom of the page.
-- **Pixel-perfect Design**: `PostCard` and `AnalysisModal` styled precisely according to the provided Figma layout, including animations (`<Transition>`).
-- **Security**: Parameterized queries to prevent SQL injections. JWT Bearer auth implementation.
+```bash
+docker-compose up --build
+```
 
-## How to Run
+- **Backend API**: http://localhost:8000
+- **Frontend**: http://localhost:5173
+- **API Docs**: http://localhost:8000/docs
 
-1. Clone or navigate to the project root directory.
-2. Build and start the containers using Docker Compose:
+## API Endpoints
 
-   ```bash
-   docker-compose up --build
-   ```
+### Users
+| Method | Endpoint | Auth | Description |
+|--------|----------|------|-------------|
+| POST | `/users` | No | Create user, returns JWT |
+| GET | `/users/{id}/token` | No | Get JWT by user ID |
+| PATCH | `/users/{id}` | Yes | Update user name |
+| DELETE | `/users/{id}` | Yes | Delete user |
 
-3. Services will be available at:
-   - **Frontend**: http://localhost:5173
-   - **Backend API**: http://localhost:8000
-   - **PostgreSQL**: localhost:5432
-   - **Redis**: localhost:6379
+### Publications
+| Method | Endpoint | Auth | Description |
+|--------|----------|------|-------------|
+| POST | `/publications` | Yes | Create publication |
+| GET | `/publications/user/{id}` | No | Get user's publications (paginated) |
+| PATCH | `/publications/{id}` | Yes | Update publication |
+| DELETE | `/publications/{id}` | Yes | Delete publication |
 
-The database automatically initializes a `Test User` (ID = 1) and 15 mock posts so that the frontend pagination and caching can be tested immediately upon startup.
+### Instagram
+| Method | Endpoint | Auth | Description |
+|--------|----------|------|-------------|
+| GET | `/instagram/reel/{reel_id}/stats` | No | Get real engagement stats for a reel |
 
-## Testing the API
-A Postman collection is included in the repository root: `postman_collection.json`. Import it into Postman or Insomnia to explore the API.
+## Caching
 
-Alternatively, you can access the automatically generated interactive API docs provided by FastAPI at http://localhost:8000/docs.
+- Publications are cached in Redis with 600s TTL on creation
+- Reading from cache is instant; cache miss triggers a 2s simulated delay before Postgres query
+- Cache keys: `pub:{id}`, `user_pubs:{user_id}:{limit}:{offset}`
+- On mutation, all paginated cache keys for the user are invalidated via SCAN pattern match
+
+## Tech Stack
+
+- **Backend**: FastAPI, asyncpg (raw queries, no ORM), Redis, PyJWT, httpx
+- **Frontend**: Vue 3, TypeScript, Vite, Tailwind CSS, Vue Router, Axios, VueUse
+- **Infrastructure**: Docker Compose, PostgreSQL 16, Redis 7
+
+## Project Structure
+
+```
+backend/app/
+├── main.py              # FastAPI app, CORS, startup
+├── config.py            # Settings (DB, Redis, JWT)
+├── db.py                # asyncpg connection pool
+├── redis_client.py      # Redis connection
+├── auth/                # JWT create/decode, get_current_user DI
+├── api/
+│   ├── auth.py          # Auth endpoints
+│   ├── users.py         # Users CRUD
+│   ├── publications.py  # Publications CRUD with Redis caching
+│   └── instagram.py     # Instagram reel stats proxy
+└── models/              # Pydantic v2 schemas
+
+frontend/src/
+├── api/index.ts         # Axios client with JWT interceptor
+├── views/               # FeedView (infinite scroll feed)
+├── components/          # PostCard, AnalysisModal, AnimatedNumber
+├── composables/         # useLike, useInfiniteScroll
+└── router/              # Vue Router config
+```
+
+## Postman
+
+Import `backend/postman_collection.json` into Postman. Run "Create User" first to auto-set token and userId variables.
