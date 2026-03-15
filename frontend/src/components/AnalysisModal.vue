@@ -31,12 +31,12 @@ const formatDate = (dateString: string) => {
 };
 
 const sampleVideos = [
-  'https://assets.mixkit.co/videos/preview/mixkit-skater-doing-a-flip-trick-in-the-street-34204-large.mp4',
-  'https://assets.mixkit.co/videos/preview/mixkit-young-woman-in-a-pink-and-blue-neon-light-city-43890-large.mp4',
-  'https://assets.mixkit.co/videos/preview/mixkit-a-girl-blowing-a-bubble-gum-at-an-amusement-park-1226-large.mp4',
-  'https://assets.mixkit.co/videos/preview/mixkit-hands-holding-a-smart-phone-with-a-green-screen-32651-large.mp4',
-  'https://assets.mixkit.co/videos/preview/mixkit-young-woman-with-yellow-glasses-in-a-blue-and-pink-43895-large.mp4',
-  'https://assets.mixkit.co/videos/preview/mixkit-portrait-of-a-woman-in-a-pool-1259-large.mp4'
+  'https://storage.googleapis.com/gtv-videos-bucket/sample/ForBiggerFun.mp4',
+  'https://storage.googleapis.com/gtv-videos-bucket/sample/ForBiggerJoyrides.mp4',
+  'https://storage.googleapis.com/gtv-videos-bucket/sample/ForBiggerMeltdowns.mp4',
+  'https://storage.googleapis.com/gtv-videos-bucket/sample/Sintel.mp4',
+  'https://storage.googleapis.com/gtv-videos-bucket/sample/SubaruOutbackOnStreetAndDirt.mp4',
+  'https://storage.googleapis.com/gtv-videos-bucket/sample/TearsOfSteel.mp4'
 ];
 
 const videoUrl = computed(() => {
