@@ -1,5 +1,5 @@
-<script setup lang="ts">
 import { defineProps, defineEmits, onMounted, onUnmounted, computed, ref } from 'vue';
+import AnimatedNumber from './AnimatedNumber.vue';
 
 const props = defineProps({
   post: {
@@ -23,6 +23,16 @@ const adaptedHooks = [
 ];
 
 const currentHooks = computed(() => isAdapted.value ? adaptedHooks : originalHooks);
+
+// Generate deterministic random stats based on post ID
+const postStats = computed(() => {
+  const base = (props.post.id || 1) * 12345;
+  return {
+    views: base % 5000000 + 100000,
+    likes: base % 100000 + 5000,
+    reposts: base % 20000 + 1000
+  };
+});
 
 const handleAdapt = () => {
   if (isAdapted.value || isAdapting.value) return;
@@ -111,7 +121,9 @@ const videoUrl = computed(() => {
           <div class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden divide-y divide-gray-50">
             <div class="grid grid-cols-2 p-3 items-center">
               <span class="text-xs text-gray-500">Просмотры</span>
-              <span class="text-sm font-semibold text-right">1.2M</span>
+              <span class="text-sm font-semibold text-right text-gray-900">
+                <AnimatedNumber :value="postStats.views" format="compact" :duration="2000" />
+              </span>
             </div>
             <div class="grid grid-cols-2 p-3 items-center">
               <span class="text-xs text-gray-500">Лайки</span>
@@ -119,12 +131,14 @@ const videoUrl = computed(() => {
                  <svg xmlns="http://www.w3.org/2000/svg" class="h-3 w-3" viewBox="0 0 20 20" fill="currentColor">
                   <path fill-rule="evenodd" d="M3.172 5.172a4 4 0 015.656 0L10 6.343l1.172-1.171a4 4 0 115.656 5.656L10 17.657l-6.828-6.829a4 4 0 010-5.656z" clip-rule="evenodd" />
                 </svg>
-                45.2K
+                <AnimatedNumber :value="postStats.likes" format="compact" :duration="2200" />
               </span>
             </div>
             <div class="grid grid-cols-2 p-3 items-center">
               <span class="text-xs text-gray-500">Репосты</span>
-              <span class="text-sm font-semibold text-right text-gray-800">12.1K</span>
+              <span class="text-sm font-semibold text-right text-gray-800">
+                <AnimatedNumber :value="postStats.reposts" format="compact" :duration="2500" />
+              </span>
             </div>
           </div>
         </div>

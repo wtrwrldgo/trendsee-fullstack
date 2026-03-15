@@ -4,6 +4,7 @@ import { useIntersectionObserver } from '@vueuse/core';
 import api from '../api';
 import PostCard from '../components/PostCard.vue';
 import AnalysisModal from '../components/AnalysisModal.vue';
+import SkeletonCard from '../components/SkeletonCard.vue';
 
 interface Publication {
   id: number;
@@ -103,12 +104,14 @@ const openAnalysis = (post: Publication) => {
         />
       </div>
       
-      <!-- Infinite Scroll Trigger -->
-      <div ref="target" class="h-20 flex items-center justify-center mt-8">
-        <div v-if="loading" class="text-blue-500 font-semibold animate-pulse">
-          Loading more posts... (might take 2s for cold ones)
+      <!-- Loading State & Infinite Scroll Trigger -->
+      <div ref="target" class="w-full">
+        <!-- Text feedback removed, replaced with skeleton grid -->
+        <div v-if="loading" class="flex flex-wrap gap-6 mt-6">
+           <SkeletonCard v-for="i in 6" :key="`skeleton-${i}`" />
         </div>
-        <div v-else-if="!hasMore" class="text-gray-500">
+        
+        <div v-if="!hasMore && publications.length > 0" class="text-gray-500 h-20 flex items-center justify-center mt-8">
           No more posts to load.
         </div>
       </div>
